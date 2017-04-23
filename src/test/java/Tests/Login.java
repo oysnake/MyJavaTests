@@ -1,37 +1,35 @@
 package Tests;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import static junit.framework.TestCase.assertEquals;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.vlad.MyTest.utils.DriverUtils;
+
+import static org.testng.Assert.assertEquals;
+
 
 public class Login {
     private WebDriver driver;
 
-    @Before
+    @BeforeMethod
     public void setup(){
-        System.setProperty("webdriver.chrome.driver", "E://chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://www.work.ua");
+        driver = DriverUtils.get().getDriver();
+        DriverUtils.get().getURL("https://work.ua/");
     }
 
-    @After
+    @AfterMethod
     public void tearDown(){
-        driver.close();
+        DriverUtils.get().closePage();
     }
 
     @Test
     public void loginTest(){
-        assertEquals("Work.ua — cайт поиска работы №1 в Украине", driver.getTitle());
+        assertEquals("Work.ua — cайт поиска работы №1 в Украине", DriverUtils.get().getTitle());
         driver.findElement(By.cssSelector(".btn.btn-default")).click();
         WebDriverWait waitforForm = new WebDriverWait(driver, 20);
         waitforForm.until(ExpectedConditions.visibilityOfElementLocated(By.id("lForm")));
@@ -45,6 +43,6 @@ public class Login {
         driver.findElement(By.cssSelector(".btn.btn-default")).click();
 
         String bodyText = driver.findElement(By.className("text-white")).getText();
-        Assert.assertTrue("Добро пожаловать, Vlad!'", bodyText.contains(bodyText));
+        Assert.assertEquals("Добро пожаловать, Vlad!", bodyText);
     }
 }
