@@ -5,6 +5,8 @@
         <classes>
             <class name="Tests.Login" />
             <class name="Tests.Search" />
+            <class name="Tests.CitySearch" />
+            <class name="Tests.extendSearch" />
         </classes>
     </test>
 
