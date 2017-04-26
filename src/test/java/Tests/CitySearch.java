@@ -11,6 +11,8 @@ import org.testng.annotations.Test;
 import org.vlad.MyTest.utils.DriverUtils;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import org.testng.asserts.Assertion;
+import org.testng.asserts.SoftAssert;
 
 public class CitySearch {
     private WebDriver driver;
@@ -42,8 +44,7 @@ public class CitySearch {
         String messageLviv = driver.findElement(By.id("cityPage")).getText();
         Assert.assertEquals("Работа во Львове", messageLviv);
 
-        //doesn't work.error: expected [] actual Львов
-        //String lvivInput = driver.findElement(By.className("js-main-region")).getText();
-        //Assert.assertEquals("Львов", lvivInput);
+        String lvivInput = driver.findElement(By.className("js-main-region")).getAttribute("value");
+        Assert.assertEquals("Львов", lvivInput);
     }
 }
