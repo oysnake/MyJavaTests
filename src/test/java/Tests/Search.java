@@ -13,37 +13,34 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import org.testng.asserts.Assertion;
 import org.testng.asserts.SoftAssert;
+import org.vlad.MyTest.po.MainPagePO;
+import org.vlad.MyTest.po.SearchPagePO;
+import org.vlad.MyTest.utils.DriverUtils;
 
 public class Search {
     private WebDriver driver;
 
     @BeforeMethod
     public void setup(){
-        System.setProperty("webdriver.chrome.driver", "E://chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://www.work.ua");
+        driver = DriverUtils.get().getDriver();
+        DriverUtils.get().getURL("https://work.ua/");
+
     }
     @AfterMethod
     public void tearDown(){
-        driver.close();
+        DriverUtils.get().closePage();
     }
 
     @Test
     public void searchTest() {
-        assertEquals("Work.ua — cайт поиска работы №1 в Украине", driver.getTitle());
+        assertEquals("Work.ua — cайт поиска работы №1 в Украине", DriverUtils.get().getTitle());
+        new SearchPagePO()
+                .typeJobName("QA Automation")
+                .typeCity("Львов")
+                .clickSearchButton()
+                .clickRecentDropdown()
+                .clickDropdownItem(2)
+                .printResults();
 
-        driver.findElement(By.id("search")).sendKeys("QA Automation");
-        driver.findElement(By.className("js-main-region")).clear();
-        driver.findElement(By.className("js-main-region")).sendKeys("Львов");
-        driver.findElement(By.className("btn-search")).click();
-
-        WebDriverWait waitforresults = new WebDriverWait(driver, 10);
-        waitforresults.until(ExpectedConditions.presenceOfElementLocated(By.className("col-left")));
-
-        driver.findElement(By.id("dropdownMenu1")).click();
-        WebDriverWait waitforDropdown = new WebDriverWait(driver, 10);
-        waitforDropdown.until(ExpectedConditions.visibilityOfElementLocated(By.className("dropdown-menu")));
-        driver.findElement(By.cssSelector(".dropdown-menu > li:nth-child(3)")).click();
     }
 }

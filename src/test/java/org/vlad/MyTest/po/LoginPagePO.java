@@ -19,6 +19,7 @@ public class LoginPagePO extends AbstractPO {
     }
 
     public boolean isRememberMeChecboxSelected(){
+
         return isSelected(rememberMeCheckbox);
     }
 

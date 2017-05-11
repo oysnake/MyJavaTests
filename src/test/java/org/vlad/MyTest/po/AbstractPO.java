@@ -1,11 +1,15 @@
 package org.vlad.MyTest.po;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.vlad.MyTest.utils.DriverUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //abstract class - can't create instance of this class
 //описіваем базовый функционал тут! (пейджобджект)
@@ -31,6 +35,35 @@ public abstract class AbstractPO {
     boolean isSelected(By locator){
         waitForVisibility(locator, true);
         return driver.findElement(locator).isSelected();
+    }
+
+    ArrayList<String> getElementsTextContentValues(By locator){
+        try {
+            waitForPresence(locator, false);
+        }
+        catch (TimeoutException e){
+        }
+        finally {
+            ArrayList<String> textValues = new ArrayList<String>();
+            //
+            List<WebElement> elementsList = driver.findElements(locator);
+            for (int i=0; i<elementsList.size(); i++){
+                textValues.add(elementsList.get(i).getAttribute("textContent"));
+            }
+            return textValues;
+
+        }
+    }
+
+    ArrayList<String> getElementsTextVisibleValues(By locator){
+        ArrayList<String> textValues = new ArrayList<String>();
+        //
+        List<WebElement> elementsList = driver.findElements(locator);
+        for (int i=0; i<elementsList.size(); i++){
+            textValues.add(elementsList.get(i).getText());
+        }
+        return textValues;
+
     }
 
     private void waitForPresence(By locator, boolean expectedPresence){
